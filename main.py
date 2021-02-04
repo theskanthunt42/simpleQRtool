@@ -42,4 +42,4 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         else:
             pass
 
-        
+    
