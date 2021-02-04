@@ -56,14 +56,14 @@
      </rect>
     </property>
     <property name="text">
-     <string>Execute</string>
+     <string>Convert</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="modeTextToQR">
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>60</y>
+      <y>90</y>
       <width>81</width>
       <height>18</height>
      </rect>
@@ -79,7 +79,7 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>80</y>
+      <y>110</y>
       <width>81</width>
       <height>18</height>
      </rect>
@@ -235,13 +235,26 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>120</y>
+      <y>130</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Export</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="importExec">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>60</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Import</string>
     </property>
    </widget>
   </widget>
