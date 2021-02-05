@@ -7,6 +7,9 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         super(simpQRTool, self).__init__(parent)
         self.systemPlatform = sys.platform #Get current system POSIX or Windows or sth else
         self.setupUi(self)
+        self.curPath = os.getcwd()
+        self.fullFilePath = ''
+        self.fileImportStats = False
         self.actionExit.triggered.connect(self.exit)
         self.encodingUnicode8.setChecked(True) #Default value
         self.res172.setChecked(True)
@@ -110,13 +113,16 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             self.resQR = '720'
     #Import files using QFileDialog
     def importTrigger(self):
-        self.curPath = os.getcwd()
         self.fileDialog = QFileDialog.getOpenFileName(self, 'Open file', self.curPath, "PNG files (*.png)")
         self.fullFilePath = self.fileDialog[0]
         #self.fileName = self.fullFilePath.split(os.sep)[len(self.fullFilePath) -1]
         #Just figure out I only need the path to the file...
+        self.fileImportStats = True
         self.infoOutput(f'Selected file: {self.fullFilePath}', terminal=True, statBar=True, statBarTime=1500)
-        
+
+    def convertTrigger(self):
+        if self.fileImportStats and self.fullFilePath != '':
+            
 
 def main():
     app = QApplication(sys.argv)
