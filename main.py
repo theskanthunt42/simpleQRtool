@@ -93,7 +93,29 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         radioButton = self.sender()
         if radioButton.isChecked():
             self.textEncoding = 'shift-jis'
+    #Resolution of QR code(172*172, 480*480, 720*720)
+    def resSet172(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.resQR = '172'
     
+    def resSet480(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.resQR = '480'
+    
+    def resSet720(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.resQR = '720'
+    #Import files using QFileDialog
+    def importTrigger(self):
+        self.curPath = os.getcwd()
+        self.fileDialog = QFileDialog.getOpenFileName(self, 'Open file', self.curPath, "PNG files (*.png)")
+        self.fullFilePath = self.fileDialog[0]
+        #self.fileName = self.fullFilePath.split(os.sep)[len(self.fullFilePath) -1]
+        #Just figure out I only need the path to the file...
+        self.infoOutput(f'Selected file: {self.fullFilePath}', terminal=True, statBar=True, statBarTime=1500)
         
 
 def main():
