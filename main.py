@@ -78,6 +78,23 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             self.res172.setEnabled(True)
             self.res480.setEnabled(True)
             self.res720.setEnabled(True)
+    #Text encoding
+    def encodeModeUni(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.textEncoding = 'utf-8'
+    
+    def encodeModeAscii(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.textEncoding = 'ascii'
+    
+    def encodeModeShift(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.textEncoding = 'shift-jis'
+    
+        
 
 def main():
     app = QApplication(sys.argv)
