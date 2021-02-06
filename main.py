@@ -9,7 +9,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.systemPlatform = sys.platform #Get current system POSIX or Windows or sth else
         self.setupUi(self)
         self.curPath = os.getcwd()
-        self.osSep = os.sep()
+        self.osSep = os.sep
         self.fullFilePath = ''
         self.fileImportStats = False
         self.modeAuto = True
@@ -73,7 +73,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
 
     def sliderValueChanging(self, value):
         self.sizeOfImage = value
-        self.infoOutput(logs=f'Size changed to {self.sizeOfImage}' terminal=True, statBar=False, statBarTime=0)
+        self.infoOutput(logs=f'Size changed to {self.sizeOfImage}', terminal=True, statBar=False, statBarTime=0)
         return None
 
     def manualSetMode(self):
