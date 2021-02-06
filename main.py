@@ -11,9 +11,11 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.fullFilePath = ''
         self.fileImportStats = False
         self.actionExit.triggered.connect(self.exit)
+        self.sizeOfImage = 1
         self.encodingUnicode8.setChecked(True) #Default value
-        self.res172.setChecked(True)
         self.modeTextToQR.setChecked(True)
+        self.sizeSlider.setEnabled(False)
+        self.sizeAutoButton.setChecked(True)
         self.buttonGroupMode = QButtonGroup() #Create groups for radio buttons
         self.buttonGroupEncoding = QButtonGroup()
         self.buttonGroupSize = QButtonGroup()
@@ -33,8 +35,17 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.importExec.clicked.connect(self.importTrigger)
         self.exportExec.clicked.connect(self.exportMain)
         self.actionExport.triggered.connect(self.exportMain)
+        self.sizeManualButton.clicked.connect(self.manualSetMode)
+        self.sizeSlider.valueChanged.connect(self.sliderValueChanging)
 
-    def mainDecode(self):
+    def sliderValueChanging(self, value):
+        self.sizeOfImage = value
+        self.infoOutput(logs=f'Size changed to {self.sizeOfImage}' terminal=True, statBar=False, statBarTime=0)
+        return None
+
+    def manualSetMode(self):
+        self.sizeSlider.setEnabled(True)
+
 
 
 #This function below is use to output infomations to Terminal or the statubar of the GUI
@@ -63,9 +74,10 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             self.encodingUnicode8.setEnabled(False)
             self.encodingAscii.setEnabled(False)
             self.encodingShift.setEnabled(False)
-            self.res172.setEnabled(False)
-            self.res480.setEnabled(False)
-            self.res720.setEnabled(False)
+            self.sizeAutoButton.setEnabled(False)
+            self.sizeManualButton.setEnabled(False)
+            self.sizeSlider.setEnabled(False)
+        return None
 #Same as up
     def modeEncode(self):
         #Enable all stuff incase some one select "QR to Text" before
@@ -77,24 +89,28 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             self.encodingShift.setEnabled(True)
             self.encodingUnicode8.setEnabled(True)
             self.encodingAscii.setEnabled(True)
-            self.res172.setEnabled(True)
-            self.res480.setEnabled(True)
-            self.res720.setEnabled(True)
+            self.sizeAutoButton.setEnabled(True)
+            self.sizeManualButton.setEnabled(True)
+            self.sizeSlider.setEnabled(True)
+        return None
     #Text encoding
     def encodeModeUni(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             self.textEncoding = 'utf-8'
+        return None
     
     def encodeModeAscii(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             self.textEncoding = 'ascii'
+        return None
     
     def encodeModeShift(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             self.textEncoding = 'shift-jis'
+        return None
     #Import files using QFileDialog
     def importTrigger(self):
         self.fileDialog = QFileDialog.getOpenFileName(self, 'Open file', self.curPath, "PNG files (*.png)")
@@ -103,7 +119,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         #Just figure out I only need the path to the file...
         self.fileImportStats = True
         self.infoOutput(f'Selected file: {self.fullFilePath}', terminal=True, statBar=True, statBarTime=1500)
-
+        return None
 
 def main():
     app = QApplication(sys.argv)
