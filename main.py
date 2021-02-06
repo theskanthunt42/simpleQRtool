@@ -11,6 +11,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.curPath = os.getcwd()
         self.osSep = os.sep
         self.fullFilePath = ''
+        self.allLogs =''
         self.fileImportStats = False
         self.modeAuto = True
         self.actionExit.triggered.connect(self.exit)
@@ -19,6 +20,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.modeTextToQR.setChecked(True)
         self.sizeSlider.setEnabled(False)
         self.sizeAutoButton.setChecked(True)
+        self.encodingUnicode8.setChecked(True)
         self.buttonGroupMode = QButtonGroup() #Create groups for radio buttons
         self.buttonGroupEncoding = QButtonGroup()
         self.buttonGroupSize = QButtonGroup()
@@ -38,7 +40,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.importExec.clicked.connect(self.importTrigger)
         self.exportExec.clicked.connect(self.exportMain)
         self.actionExport.triggered.connect(self.exportMain)
-        self.sizeManualButton.clicked.connect(self.manualSetMode)
+        self.sizeManualButton.toggled.connect(self.manualSetMode)
         self.sizeSlider.valueChanged.connect(self.sliderValueChanging)
 
     def mainDecoder(self):
@@ -67,7 +69,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
     def convertTrigger(self):
         self.textInBox = self.textBox.toPlainText()
         if self.textInBox != '' or None:
-            self.mainEncoder
+            self.mainDecoder
         else:
             self.infoOutput(logs='Error! Please fill some text into the box!', terminal=True, statBar=True, statBarTime=1500)
 
