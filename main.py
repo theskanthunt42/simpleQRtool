@@ -1,6 +1,7 @@
-import os, sys, json, socket, mainUi
+import os, sys, json, socket, mainUi, qrcode
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QAction, QFileDialog, QRadioButton, QButtonGroup
+from PyQt5.QtGui import QPixmap
 class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
     def __init__(self, parent=None):
         #Initialize, Nothing to say
@@ -8,8 +9,10 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.systemPlatform = sys.platform #Get current system POSIX or Windows or sth else
         self.setupUi(self)
         self.curPath = os.getcwd()
+        self.osSep = os.sep()
         self.fullFilePath = ''
         self.fileImportStats = False
+        self.modeAuto = True
         self.actionExit.triggered.connect(self.exit)
         self.sizeOfImage = 1
         self.encodingUnicode8.setChecked(True) #Default value
@@ -38,14 +41,45 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.sizeManualButton.clicked.connect(self.manualSetMode)
         self.sizeSlider.valueChanged.connect(self.sliderValueChanging)
 
+    def mainDecoder(self):
+        size = 1
+        if self.modeAuto != True:
+            size = 1
+        else:
+            size = self.sizeSlider.value()
+        qrObject = qrcode.QRCode(version=size, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+        try:
+            qrObject.add_data(self.textInBox.encode(self.textEncoding))
+        except SystemError:
+            self.infoOutput(logs='Error when adding text to decoder.', terminal=True, statBar=True, statBarTime=2000)
+        try:
+            qrObject.make(fit=True)
+        except SystemError:
+            self.infoOutput(logs='Error when generating QR Code.', terminal=True, statBar=True, statBarTime=2000)
+        imageObject = qrObject.make_image(fill_color='black', back_color='white')
+        with open(f'{self.curPath}{self.osSep}.tmp.png', 'wb') as f:
+            f.write(imageObject)
+        scene = QtWidgets.QGraphicsScene
+        pixMap = QPixmap(f'{self.curPath}{self.osSep}.tmp.png')
+        item = QtWidgets.QGraphicsPixmapItem(pixMap)
+        scene.addItem(item)
+        self.graphicsView.setScene(scene)
+    def convertTrigger(self):
+        self.textInBox = self.textBox.toPlainText()
+        if self.textInBox != '' or None:
+            self.mainEncoder
+        else:
+            self.infoOutput(logs='Error! Please fill some text into the box!', terminal=True, statBar=True, statBarTime=1500)
+
     def sliderValueChanging(self, value):
         self.sizeOfImage = value
         self.infoOutput(logs=f'Size changed to {self.sizeOfImage}' terminal=True, statBar=False, statBarTime=0)
         return None
 
     def manualSetMode(self):
+        self.modeAuto = False
         self.sizeSlider.setEnabled(True)
-
+        return None
 
 
 #This function below is use to output infomations to Terminal or the statubar of the GUI
