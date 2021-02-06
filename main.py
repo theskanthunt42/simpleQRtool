@@ -16,27 +16,26 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.modeTextToQR.setChecked(True)
         self.buttonGroupMode = QButtonGroup() #Create groups for radio buttons
         self.buttonGroupEncoding = QButtonGroup()
-        self.buttonGroupRes = QButtonGroup()
+        self.buttonGroupSize = QButtonGroup()
         self.buttonGroupMode.addButton(self.modeQRToText) #Add button to their groups
         self.buttonGroupMode.addButton(self.modeTextToQR)
         self.buttonGroupEncoding.addButton(self.encodingUnicode8)
         self.buttonGroupEncoding.addButton(self.encodingAscii)
         self.buttonGroupEncoding.addButton(self.encodingShift)
-        self.buttonGroupRes.addButton(self.res172)
-        self.buttonGroupRes.addButton(self.res480)
-        self.buttonGroupRes.addButton(self.res720)
+        self.buttonGroupSize.addButton(self.sizeAutoButton)
+        self.buttonGroupSize.addButton(self.sizeManualButton)
         self.modeQRToText.toggled.connect(self.modeDecode) #Toggle connect
         self.modeTextToQR.toggled.connect(self.modeEncode)
         self.encodingUnicode8.toggled.connect(self.encodeModeUni)
         self.encodingAscii.toggled.connect(self.encodeModeAscii)
         self.encodingShift.toggled.connect(self.encodeModeShift)
-        self.res172.toggled.connect(self.resSet172)
-        self.res480.toggled.connect(self.resSet480)
-        self.res720.toggled.connect(self.resSet720)
         self.mainExec.clicked.connect(self.convertTrigger)
         self.importExec.clicked.connect(self.importTrigger)
         self.exportExec.clicked.connect(self.exportMain)
         self.actionExport.triggered.connect(self.exportMain)
+
+    def mainDecode(self):
+
 
 #This function below is use to output infomations to Terminal or the statubar of the GUI
     def infoOutput(self, logs, terminal, statBar, statBarTime):
@@ -96,21 +95,6 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         radioButton = self.sender()
         if radioButton.isChecked():
             self.textEncoding = 'shift-jis'
-    #Resolution of QR code(172*172, 480*480, 720*720)
-    def resSet172(self):
-        radioButton = self.sender()
-        if radioButton.isChecked():
-            self.resQR = '172'
-    
-    def resSet480(self):
-        radioButton = self.sender()
-        if radioButton.isChecked():
-            self.resQR = '480'
-    
-    def resSet720(self):
-        radioButton = self.sender()
-        if radioButton.isChecked():
-            self.resQR = '720'
     #Import files using QFileDialog
     def importTrigger(self):
         self.fileDialog = QFileDialog.getOpenFileName(self, 'Open file', self.curPath, "PNG files (*.png)")
@@ -120,9 +104,6 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.fileImportStats = True
         self.infoOutput(f'Selected file: {self.fullFilePath}', terminal=True, statBar=True, statBarTime=1500)
 
-    def convertTrigger(self):
-        if self.fileImportStats and self.fullFilePath != '':
-            
 
 def main():
     app = QApplication(sys.argv)
