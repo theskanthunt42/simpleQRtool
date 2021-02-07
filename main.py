@@ -1,4 +1,4 @@
-import os, sys, json, socket, mainUi, qrcode
+import os, sys, json, socket, mainUi, qrcode, qrtools
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QAction, QFileDialog, QRadioButton, QButtonGroup
 from PyQt5.QtGui import QPixmap
@@ -12,6 +12,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.osSep = os.sep
         self.fullFilePath = ''
         self.allLogs =''
+        self.textEncoding = 'utf-8'
         self.fileImportStats = False
         self.modeAuto = True
         self.actionExit.triggered.connect(self.exit)
@@ -38,13 +39,30 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.encodingShift.toggled.connect(self.encodeModeShift)
         self.mainExec.clicked.connect(self.convertTrigger)
         self.importExec.clicked.connect(self.importTrigger)
-        #self.exportExec.clicked.connect(self.exportMain)
-        #self.actionExport.triggered.connect(self.exportMain)
+        self.exportExec.clicked.connect(self.exportMain)
+        self.actionExport.triggered.connect(self.exportMain)
         self.sizeAutoButton.toggled.connect(self.autoSetMode)
         self.sizeManualButton.toggled.connect(self.manualSetMode)
         self.sizeSlider.valueChanged.connect(self.sliderValueChanging)
 
-    def mainDecoder(self):
+    def exportMain(self):
+        if self.genStat:
+            if self.systemPlatform == 'linux' or 'linux2' or 'darwin' or 'freebsd' or 'openbsd' or 'macos':
+                try:
+                    os.system(f'cp .tmp.png Output/{self.textInBox[:7]}.png')
+                except SystemError:
+                    self.infoOutput("Can't copy file to Output.", True, True, 1500)
+            elif self.systemPlatform == 'win32' or 'win64' or 'cygwin' or 'msys':
+                try:
+                    os.system(f'copy .temp.png Output')
+                except SystemError:
+                    self.infoOutput("Can't copy file to Output.", True, True, 1500)
+            else:
+                self.infoOutput("Cant copy file to Output.", True, True, 1000)
+        else:
+            self.infoOutput("Please generate the QR code first.", True, True, 1000)
+
+    def mainDecoder(self, text):
         size = None
         if self.modeAuto != True:
             size = None
@@ -52,7 +70,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             size = self.sizeSlider.value()
         qrObject = qrcode.QRCode(version=size, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
         try:
-            qrObject.add_data(self.textInBox.encode(self.textEncoding))
+            qrObject.add_data(text.encode(self.textEncoding))
         except SystemError:
             self.infoOutput(logs='Error when adding text to decoder.', terminal=True, statBar=True, statBarTime=2000)
         try:
@@ -60,14 +78,14 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         except SystemError:
             self.infoOutput(logs='Error when generating QR Code.', terminal=True, statBar=True, statBarTime=2000)
         imageObject = qrObject.make_image(fill_color='black', back_color='white')
-        with open(f'{self.curPath}{self.osSep}.tmp.png', 'wb') as f:
-            f.write(imageObject)
-        self.pixmapLabel.setPixmap(QPixmap(f'{self.curPath}{self.osSep}.tmp.png'))
+        imageObject.save('.tmp.png')
+        self.pixmapLabel.setPixmap(QPixmap('.tmp.png'))
+        self.genStat = True
 
     def convertTrigger(self):
         self.textInBox = self.textBox.toPlainText()
         if self.textInBox != '' or None:
-            self.mainDecoder
+            self.mainDecoder(self.textInBox)
         else:
             self.infoOutput(logs='Error! Please fill some text into the box!', terminal=True, statBar=True, statBarTime=1500)
 
