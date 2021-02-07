@@ -129,6 +129,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
 
     def exit(self):
         self.infoOutput(logs='Exit triggered.', terminal=True, statBar=False, statBarTime=0)
+        os.remove(f'{self.curPath}{self.osSep}.tmp.png')
         raise SystemExit
 #Use to handle mode switch
     def modeDecode(self):
