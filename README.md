@@ -9,8 +9,10 @@ Can Make and Read QR Code with some options
 <br>
 (Thanks to various useful module and advice provided by the community)
 <br>
-## Task List
+
+### Task List
 <br>
+
 - [x] At least it works with decode/encode QR Codes
 - [ ] More options in config.json
 - [ ] Support more than PNG files
@@ -20,9 +22,9 @@ Can Make and Read QR Code with some options
 - [ ] Check if is working on other platform like Windows
 - [ ] Better overall stability
 <br>
-## Explainations
-<br>
-    config.json:
+
+### Explainations
+config.json:
         <br>
         Config some addtional setting other than GUI side provide, Like `background_color` And `color`
         <br>
@@ -38,9 +40,9 @@ Can Make and Read QR Code with some options
         <br>
         But still not sure it's actually working or not.
 <br>
-## Requirements
-<br>
-    python-qrcode(Or pyqrcode)
+
+### Requirements
+python-qrcode(Or pyqrcode)
     <br>
     https://github.com/lincolnloop/python-qrcode
     <br>
@@ -56,10 +58,9 @@ Can Make and Read QR Code with some options
     <br>
     It might just not working on anyother OS other than Linux
 <br>
-## For more
-    <br>
-    If I did anything wrong or u just wanna suggestions, Or I should del this, U can create a issues or contact me by using:
-        <br>
+
+### For more
+If I did anything wrong or u just wanna suggestions, Or I should del this, U can create a issues or contact me by using:
         the42game@rosehip.moe (Might wait for a long time till reply)
         <br>
         Or @the42game:chat.rosehip.moe on Matrix
