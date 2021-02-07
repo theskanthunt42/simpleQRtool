@@ -38,7 +38,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.encodingAscii.toggled.connect(self.encodeModeAscii)
         self.encodingShift.toggled.connect(self.encodeModeShift)
         self.mainExec.clicked.connect(self.convertTrigger)
-        self.importExec.clicked.connect(self.importTrigger)
+        #self.importExec.clicked.connect(self.importTrigger)
         self.exportExec.clicked.connect(self.exportMain)
         self.actionExport.triggered.connect(self.exportMain)
         self.sizeAutoButton.toggled.connect(self.autoSetMode)
@@ -47,23 +47,29 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
 
     def exportMain(self):
         if self.genStat:
+            fileName = self.textInBox[:7].split[' '][0]
             if self.systemPlatform == 'linux' or 'linux2' or 'darwin' or 'freebsd' or 'openbsd' or 'macos':
                 try:
-                    os.system(f'cp .tmp.png Output/{self.textInBox[:7]}.png')
+                    os.system(f'cp .tmp.png {self.curPath}/Output/{fileName}.png')
+                    self.infoOutput(f"PNG exported to {self.curPath}/Output/{fileName}.png", True, True, 2000)
                 except SystemError:
                     self.infoOutput("Can't copy file to Output.", True, True, 1500)
             elif self.systemPlatform == 'win32' or 'win64' or 'cygwin' or 'msys':
                 try:
-                    os.system(f'copy .temp.png Output')
+                    os.system(f'copy .temp.png {self.curPath}\\Output\\{fileName}.png')
+                    self.infoOutput(f"PNG exported to {self.curPath}\\Output\\{fileName}.png", True, True, 2000)
                 except SystemError:
                     self.infoOutput("Can't copy file to Output.", True, True, 1500)
             else:
                 self.infoOutput("Cant copy file to Output.", True, True, 1000)
         else:
             self.infoOutput("Please generate the QR code first.", True, True, 1000)
+        return None
 
     def mainDecoder(self, text):
         size = None
+        with open('config.json') as f:
+            settings = json.load(f)
         if self.modeAuto != True:
             size = None
         else:
@@ -77,7 +83,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             qrObject.make(fit=True)
         except SystemError:
             self.infoOutput(logs='Error when generating QR Code.', terminal=True, statBar=True, statBarTime=2000)
-        imageObject = qrObject.make_image(fill_color='black', back_color='white')
+        imageObject = qrObject.make_image(fill_color=settings['color'], back_color=settings['background_color'])
         imageObject.save('.tmp.png')
         self.pixmapLabel.setPixmap(QPixmap('.tmp.png'))
         self.genStat = True
