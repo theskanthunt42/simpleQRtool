@@ -1,5 +1,4 @@
-import os, sys, json, socket, mainUi, qrcode, random
-#from qrtools.qrtools import QR 
+import os, sys, json, mainUi, qrcode, random
 from PIL import Image
 import pyzbar.pyzbar as QR
 from PyQt5 import uic, QtWidgets
