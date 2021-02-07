@@ -1,4 +1,7 @@
-import os, sys, json, socket, mainUi, qrcode, qrtools
+import os, sys, json, socket, mainUi, qrcode
+#from qrtools.qrtools import QR 
+from PIL import Image
+import pyzbar.pyzbar as QR
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QAction, QFileDialog, QRadioButton, QButtonGroup
 from PyQt5.QtGui import QPixmap
@@ -38,16 +41,29 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.encodingAscii.toggled.connect(self.encodeModeAscii)
         self.encodingShift.toggled.connect(self.encodeModeShift)
         self.mainExec.clicked.connect(self.convertTrigger)
-        #self.importExec.clicked.connect(self.importTrigger)
+        self.importExec.clicked.connect(self.importTrigger)
         self.exportExec.clicked.connect(self.exportMain)
         self.actionExport.triggered.connect(self.exportMain)
         self.sizeAutoButton.toggled.connect(self.autoSetMode)
         self.sizeManualButton.toggled.connect(self.manualSetMode)
         self.sizeSlider.valueChanged.connect(self.sliderValueChanging)
 
+    def mainDecoder(self, filePath):
+        if self.fileImportStats:
+            try:
+                data = QR.decode(Image.open(filePath))
+                self.pixmapLabel.setPixmap(QPixmap(filePath))
+                print(data[0].data.decode())
+                self.textBox.setText(data[0].data.decode())
+            except SystemError:
+                self.infoOutput("Can't decode QR code!", True, True, 1000)
+        else:
+            self.infoOutput("Please import the image first.", True, True, 1000)
+        return None
+
     def exportMain(self):
         if self.genStat:
-            fileName = self.textInBox[:7].split[' '][0]
+            fileName = self.textInBox[:7]
             if self.systemPlatform == 'linux' or 'linux2' or 'darwin' or 'freebsd' or 'openbsd' or 'macos':
                 try:
                     os.system(f'cp .tmp.png {self.curPath}/Output/{fileName}.png')
@@ -66,7 +82,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             self.infoOutput("Please generate the QR code first.", True, True, 1000)
         return None
 
-    def mainDecoder(self, text):
+    def mainEncoder(self, text):
         size = None
         with open('config.json') as f:
             settings = json.load(f)
@@ -91,13 +107,13 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
     def convertTrigger(self):
         self.textInBox = self.textBox.toPlainText()
         if self.textInBox != '' or None:
-            self.mainDecoder(self.textInBox)
+            self.mainEncoder(self.textInBox)
         else:
             self.infoOutput(logs='Error! Please fill some text into the box!', terminal=True, statBar=True, statBarTime=1500)
 
     def sliderValueChanging(self, value):
         self.sizeOfImage = value
-        self.infoOutput(logs=f'Size changed to {self.sizeOfImage}', terminal=True, statBar=False, statBarTime=0)
+        self.infoOutput(logs=f'Size changed to {self.sizeOfImage}', terminal=True, statBar=True, statBarTime=1000)
         return None
 
     def autoSetMode(self):
@@ -187,6 +203,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         #Just figure out I only need the path to the file...
         self.fileImportStats = True
         self.infoOutput(f'Selected file: {self.fullFilePath}', terminal=True, statBar=True, statBarTime=1500)
+        self.mainDecoder(self.fullFilePath)
         return None
     
 
