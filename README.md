@@ -9,17 +9,18 @@ Can Make and Read QR Code with some options
 <br>
 (Thanks to various useful module and advice provided by the community)
 <br>
-Task List:
+###Task List
 <br>
 - [x] At least it works with decode/encode QR Codes
 - [ ] More options in config.json
+- [ ] Support more than PNG files
 - [ ] Better Qt Interface(Scale, Stretch stuff like that)
 - [ ] Export using QFileDialog instead of just forcing output to Output/
 - [ ] Real tmp file using Tempfile
 - [ ] Check if is working on other platform like Windows
 - [ ] Better overall stability
 <br>
-Explainations:
+###Explainations
 <br>
     config.json:
         <br>
@@ -31,8 +32,14 @@ Explainations:
         And ```color``` if for the ```fill_color``` in ```qrcode.QRCode.make_image```
         <br>
         Will add more later.
+    <br>
+    Encoding section from the GUI:
+        <br>
+        You can use mutiple encoding method to generate QR Code with UTF-8(Defaulf) ASCII and Shift-JIS(Since I am a weeb, And its the only reason I add this)
+        <br>
+        But still not sure it's actually working or not.
 <br>
-Requirements:
+###Requirements
 <br>
     python-qrcode(Or pyqrcode)
     <br>
@@ -49,3 +56,11 @@ Requirements:
     If still didn't work, Try install pillow Or...
     <br>
     It might just not working on anyother OS other than Linux
+<br>
+###For more
+    <br>
+    If I did anything wrong or u just wanna suggestions, Or I should del this, U can create a issues or contact me by using:
+        <br>
+        mailto:the42game@rosehip.moe (Might wait for a long time till reply)
+        <br>
+        Or @the42game:chat.rosehip.moe on Matrix
