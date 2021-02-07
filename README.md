@@ -9,7 +9,7 @@ Can Make and Read QR Code with some options
 <br>
 (Thanks to various useful module and advice provided by the community)
 <br>
-###Task List
+## Task List
 <br>
 - [x] At least it works with decode/encode QR Codes
 - [ ] More options in config.json
@@ -20,16 +20,15 @@ Can Make and Read QR Code with some options
 - [ ] Check if is working on other platform like Windows
 - [ ] Better overall stability
 <br>
-###Explainations
+## Explainations
 <br>
     config.json:
         <br>
-        Config some addtional setting other than GUI side provide, Like ```
-        background_color```And ```color```
+        Config some addtional setting other than GUI side provide, Like `background_color` And `color`
         <br>
-        ```background_color``` is for the ```back_color``` from ```qrcode.QRCode.make_image```
+        `background_color` is for the `back_color` from `qrcode.QRCode.make_image`
         <br>
-        And ```color``` if for the ```fill_color``` in ```qrcode.QRCode.make_image```
+        And `color` if for the `fill_color` in `qrcode.QRCode.make_image`
         <br>
         Will add more later.
     <br>
@@ -39,7 +38,7 @@ Can Make and Read QR Code with some options
         <br>
         But still not sure it's actually working or not.
 <br>
-###Requirements
+## Requirements
 <br>
     python-qrcode(Or pyqrcode)
     <br>
@@ -57,10 +56,10 @@ Can Make and Read QR Code with some options
     <br>
     It might just not working on anyother OS other than Linux
 <br>
-###For more
+## For more
     <br>
     If I did anything wrong or u just wanna suggestions, Or I should del this, U can create a issues or contact me by using:
         <br>
-        mailto:the42game@rosehip.moe (Might wait for a long time till reply)
+        the42game@rosehip.moe (Might wait for a long time till reply)
         <br>
         Or @the42game:chat.rosehip.moe on Matrix
