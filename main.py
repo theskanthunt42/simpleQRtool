@@ -16,11 +16,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.modeAuto = True
         self.actionExit.triggered.connect(self.exit)
         self.sizeOfImage = 1
-        self.encodingUnicode8.setChecked(True) #Default value
-        self.modeTextToQR.setChecked(True)
-        self.sizeSlider.setEnabled(False)
-        self.sizeAutoButton.setChecked(True)
-        self.encodingUnicode8.setChecked(True)
+        #self.encodingUnicode8.setChecked(True) #Default value
         self.buttonGroupMode = QButtonGroup() #Create groups for radio buttons
         self.buttonGroupEncoding = QButtonGroup()
         self.buttonGroupSize = QButtonGroup()
@@ -31,6 +27,10 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.buttonGroupEncoding.addButton(self.encodingShift)
         self.buttonGroupSize.addButton(self.sizeAutoButton)
         self.buttonGroupSize.addButton(self.sizeManualButton)
+        self.sizeSlider.setEnabled(False)#Default value
+        self.sizeAutoButton.setChecked(True)
+        self.modeTextToQR.setChecked(True)
+        self.encodingUnicode8.setChecked(True)
         self.modeQRToText.toggled.connect(self.modeDecode) #Toggle connect
         self.modeTextToQR.toggled.connect(self.modeEncode)
         self.encodingUnicode8.toggled.connect(self.encodeModeUni)
@@ -38,15 +38,16 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.encodingShift.toggled.connect(self.encodeModeShift)
         self.mainExec.clicked.connect(self.convertTrigger)
         self.importExec.clicked.connect(self.importTrigger)
-        self.exportExec.clicked.connect(self.exportMain)
-        self.actionExport.triggered.connect(self.exportMain)
+        #self.exportExec.clicked.connect(self.exportMain)
+        #self.actionExport.triggered.connect(self.exportMain)
+        self.sizeAutoButton.toggled.connect(self.autoSetMode)
         self.sizeManualButton.toggled.connect(self.manualSetMode)
         self.sizeSlider.valueChanged.connect(self.sliderValueChanging)
 
     def mainDecoder(self):
-        size = 1
+        size = None
         if self.modeAuto != True:
-            size = 1
+            size = None
         else:
             size = self.sizeSlider.value()
         qrObject = qrcode.QRCode(version=size, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
@@ -61,11 +62,8 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         imageObject = qrObject.make_image(fill_color='black', back_color='white')
         with open(f'{self.curPath}{self.osSep}.tmp.png', 'wb') as f:
             f.write(imageObject)
-        scene = QtWidgets.QGraphicsScene
-        pixMap = QPixmap(f'{self.curPath}{self.osSep}.tmp.png')
-        item = QtWidgets.QGraphicsPixmapItem(pixMap)
-        scene.addItem(item)
-        self.graphicsView.setScene(scene)
+        self.pixmapLabel.setPixmap(QPixmap(f'{self.curPath}{self.osSep}.tmp.png'))
+
     def convertTrigger(self):
         self.textInBox = self.textBox.toPlainText()
         if self.textInBox != '' or None:
@@ -78,9 +76,18 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.infoOutput(logs=f'Size changed to {self.sizeOfImage}', terminal=True, statBar=False, statBarTime=0)
         return None
 
+    def autoSetMode(self):
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.modeAuto = True
+            self.sizeSlider.setEnabled(False)
+        return None
+
     def manualSetMode(self):
-        self.modeAuto = False
-        self.sizeSlider.setEnabled(True)
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            self.modeAuto = False
+            self.sizeSlider.setEnabled(True)
         return None
 
 
@@ -156,6 +163,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.fileImportStats = True
         self.infoOutput(f'Selected file: {self.fullFilePath}', terminal=True, statBar=True, statBarTime=1500)
         return None
+    
 
 def main():
     app = QApplication(sys.argv)
