@@ -1,4 +1,4 @@
-import os, sys, json, socket, mainUi, qrcode
+import os, sys, json, socket, mainUi, qrcode, random
 #from qrtools.qrtools import QR 
 from PIL import Image
 import pyzbar.pyzbar as QR
@@ -15,6 +15,11 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.osSep = os.sep
         self.fullFilePath = ''
         self.allLogs =''
+        if os.path.exists(f'{self.curPath}{self.osSep}logs.txt'):
+            os.remove(f'{self.curPath}{self.osSep}logs.txt')
+        else:
+            print('No logs file left!')
+        self.genStat = False
         self.textEncoding = 'utf-8'
         self.fileImportStats = False
         self.modeAuto = True
@@ -35,6 +40,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.sizeAutoButton.setChecked(True)
         self.modeTextToQR.setChecked(True)
         self.encodingUnicode8.setChecked(True)
+        self.importExec.setEnabled(False)
         self.modeQRToText.toggled.connect(self.modeDecode) #Toggle connect
         self.modeTextToQR.toggled.connect(self.modeEncode)
         self.encodingUnicode8.toggled.connect(self.encodeModeUni)
@@ -48,11 +54,17 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         self.sizeManualButton.toggled.connect(self.manualSetMode)
         self.sizeSlider.valueChanged.connect(self.sliderValueChanging)
 
+    def randomNameGen(self, len):
+        letters = 'ABCDEFGHIJabcdefghij0123456.'
+        generatedString = ''.join(random.choice(letters) for i in range(6))
+        return generatedString
+        
+
     def mainDecoder(self, filePath):
         if self.fileImportStats:
+            self.pixmapLabel.setPixmap(QPixmap(filePath))
             try:
                 data = QR.decode(Image.open(filePath))
-                self.pixmapLabel.setPixmap(QPixmap(filePath))
                 print(data[0].data.decode())
                 self.textBox.setText(data[0].data.decode())
             except SystemError:
@@ -63,7 +75,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
 
     def exportMain(self):
         if self.genStat:
-            fileName = self.textInBox[:7]
+            fileName = self.randomNameGen(8)
             if self.systemPlatform == 'linux' or 'linux2' or 'darwin' or 'freebsd' or 'openbsd' or 'macos':
                 try:
                     os.system(f'cp .tmp.png {self.curPath}/Output/{fileName}.png')
@@ -145,7 +157,10 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
 
     def exit(self):
         self.infoOutput(logs='Exit triggered.', terminal=True, statBar=False, statBarTime=0)
-        os.remove(f'{self.curPath}{self.osSep}.tmp.png')
+        if self.genStat:
+            os.remove(f'{self.curPath}{self.osSep}.tmp.png')
+        with open(f'{self.curPath}{self.osSep}logs.txt', 'w') as f:
+            f.write(self.allLogs)
         raise SystemExit
 #Use to handle mode switch
     def modeDecode(self):
@@ -155,6 +170,8 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
             self.currentMode = "Q2T"
             #self.mainExec.setEnabled(False)
             self.exportExec.setEnabled(False)
+            self.importExec.setEnabled(True)
+            self.mainExec.setEnabled(False)
             self.encodingUnicode8.setEnabled(False)
             self.encodingAscii.setEnabled(False)
             self.encodingShift.setEnabled(False)
@@ -169,6 +186,8 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         radioButton = self.sender()
         if radioButton.isChecked():
             self.currentMode = "T2Q"
+            self.mainExec.setEnabled(True)
+            self.importExec.setEnabled(False)
             self.exportExec.setEnabled(True)
             self.encodingShift.setEnabled(True)
             self.encodingUnicode8.setEnabled(True)
