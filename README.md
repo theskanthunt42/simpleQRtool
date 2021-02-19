@@ -26,13 +26,40 @@ Can Make and Read QR Code with some options
 ### Explainations
 config.json:
         <br>
-        Config some addtional setting other than GUI side provide, Like `background_color` And `color`
+        Config some addtional setting other than GUI side provide, Like `background_color` And `color`... etc
         <br>
-        `background_color` is for the `back_color` from `qrcode.QRCode.make_image`
+        `background_color` is for the `back_color` from `qrcode.QRCode.make_image`, defaults to `white`
         <br>
-        And `color` if for the `fill_color` in `qrcode.QRCode.make_image`
+        And `color` if for the `fill_color` in `qrcode.QRCode.make_image`, defaults to `black`
         <br>
-        Will add more later.
+        `error_corrections` is for the `error_correction` from `qrcode.constants`, defaults to `0`
+        <br>
+        According to `constants.py`, You can set the value as:
+        <br>
+            # QR error correct levels
+            <br>
+            ERROR_CORRECT_L = 1
+            <br>
+            ERROR_CORRECT_M = 0
+            <br>
+            ERROR_CORRECT_Q = 3
+            <br>
+            ERROR_CORRECT_H = 2
+        <br>
+        `box_size` 
+        <br>
+        > controls how many pixels each "box" of QR code is. 
+        <br>
+        > - https://pypi.org/project/qrcode/
+        <br>
+        Defaults to `10`
+        <br>
+        `border` 
+        <br>
+        > The border parameter controls how many boxes thick the border should be
+        > - https://pypi.org/project/qrcode/
+        <br>
+        Defaults to `4`
     <br>
     Encoding section from the GUI:
         <br>

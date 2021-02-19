@@ -113,7 +113,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         else:
             size = self.sizeSlider.value()
         qrObject = qrcode.QRCode(
-            version=size, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+            version=size, error_correction=settings['error_correction'], box_size=settings['box_size'], border=settings['border'])
         try:
             qrObject.add_data(text.encode(self.textEncoding))
         except SystemError:

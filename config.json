@@ -1,4 +1,7 @@
 {
     "background_color":"white",
-    "color":"black"
+    "color":"black",
+    "error_correction":0,
+    "box_size":10,
+    "border":4
 }
