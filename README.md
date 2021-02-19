@@ -46,15 +46,14 @@ config.json:
             <br>
             ERROR_CORRECT_H = 2
         <br>
-        `box_size` 
+        `box_size`:
         <br>
         > controls how many pixels each "box" of QR code is. 
-        <br>
         > - https://pypi.org/project/qrcode/
         <br>
         Defaults to `10`
         <br>
-        `border` 
+        `border`:
         <br>
         > The border parameter controls how many boxes thick the border should be
         > - https://pypi.org/project/qrcode/
