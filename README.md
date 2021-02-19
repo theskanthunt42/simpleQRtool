@@ -14,7 +14,7 @@ Can Make and Read QR Code with some options
 <br>
 
 - [x] At least it works with decode/encode QR Codes
-- [ ] More options in config.json
+- [x] More options in config.json
 - [ ] Support more than PNG files
 - [ ] Better Qt Interface(Scale, Stretch stuff like that)
 - [x] Export using QFileDialog instead of just forcing output to Output/
