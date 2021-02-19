@@ -4,6 +4,7 @@ import json
 import mainUi
 import qrcode
 import random
+import tempfile
 from PIL import Image
 import pyzbar.pyzbar as QR
 from PyQt5 import uic, QtWidgets
@@ -76,13 +77,13 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
         return None
 
     def exportMain(self):
-        if self.genStat:
+        if self.genStat and self.SaveFileName != '' or None:
             self.SaveFileDialog = QFileDialog.getSaveFileName(
                 self, 'Save file', self.curPath, 'PNG files (*.png)')
             filepath = self.SaveFileDialog[0]
             if self.systemPlatform == 'linux' or 'linux2' or 'darwin' or 'freebsd' or 'openbsd' or 'macos':
                 try:
-                    os.system(f'cp .tmp.png {filepath}')
+                    os.system(f'cp {self.SaveFileName} {filepath}')
                     self.infoOutput(
                         f"PNG exported to {filepath}", True, True, 2000)
                 except SystemError:
@@ -90,7 +91,7 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
                         "Can't copy file to Output.", True, True, 1500)
             elif self.systemPlatform == 'win32' or 'win64' or 'cygwin' or 'msys':
                 try:
-                    os.system(f'copy .temp.png {filepath}.png')
+                    os.system(f'copy {self.SaveFileName} {filepath}.png')
                     self.infoOutput(
                         f"PNG exported to {filepath}", True, True, 2000)
                 except SystemError:
@@ -125,8 +126,10 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
                             terminal=True, statBar=True, statBarTime=2000)
         imageObject = qrObject.make_image(
             fill_color=settings['color'], back_color=settings['background_color'])
-        imageObject.save('.tmp.png')
-        self.pixmapLabel.setPixmap(QPixmap('.tmp.png'))
+        self.SaveFileName = tempfile.mktemp('.png')
+        open (self.SaveFileName, 'wb').close()
+        imageObject.save(self.SaveFileName)
+        self.pixmapLabel.setPixmap(QPixmap(self.SaveFileName))
         self.genStat = True
 
     def convertTrigger(self):
@@ -174,8 +177,6 @@ class simpQRTool(QtWidgets.QMainWindow, mainUi.Ui_MainWindow):
     def exit(self):
         self.infoOutput(logs='Exit triggered.', terminal=True,
                         statBar=False, statBarTime=0)
-        if self.genStat:
-            os.remove(f'{self.curPath}{self.osSep}.tmp.png')
         with open(f'{self.curPath}{self.osSep}logs.txt', 'w') as f:
             f.write(self.allLogs)
         raise SystemExit

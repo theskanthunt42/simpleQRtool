@@ -17,8 +17,8 @@ Can Make and Read QR Code with some options
 - [ ] More options in config.json
 - [ ] Support more than PNG files
 - [ ] Better Qt Interface(Scale, Stretch stuff like that)
-- [ ] Export using QFileDialog instead of just forcing output to Output/
-- [ ] Real tmp file using Tempfile
+- [x] Export using QFileDialog instead of just forcing output to Output/
+- [x] Real tmp file using Tempfile
 - [ ] Check if is working on other platform like Windows
 - [ ] Better overall stability
 <br>
