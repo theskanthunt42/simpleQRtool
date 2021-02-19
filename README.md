@@ -35,7 +35,6 @@ config.json:
         `error_corrections` is for the `error_correction` from `qrcode.constants`, defaults to `0`
         <br>
         According to `constants.py`, You can set the value as:
-        <br>
             <br>
             ERROR_CORRECT_L = 1
             <br>
@@ -81,7 +80,7 @@ python-qrcode(Or pyqrcode)
     <br>
     If still didn't work, Try install pillow Or...
     <br>
-    It might just not working on anyother OS other than Linux
+    It might just not working on any other OS other than Linux
 <br>
 
 ### For more
