@@ -36,7 +36,6 @@ config.json:
         <br>
         According to `constants.py`, You can set the value as:
         <br>
-            # QR error correct levels
             <br>
             ERROR_CORRECT_L = 1
             <br>
@@ -48,15 +47,15 @@ config.json:
         <br>
         `box_size`:
         <br>
-        > controls how many pixels each "box" of QR code is. 
-        > - https://pypi.org/project/qrcode/
+        "controls how many pixels each 'box' of QR code is." 
+        - https://pypi.org/project/qrcode/
         <br>
         Defaults to `10`
         <br>
         `border`:
         <br>
-        > The border parameter controls how many boxes thick the border should be
-        > - https://pypi.org/project/qrcode/
+        "The border parameter controls how many boxes thick the border should be"
+        - https://pypi.org/project/qrcode/
         <br>
         Defaults to `4`
     <br>
