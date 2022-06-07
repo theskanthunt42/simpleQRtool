@@ -5,7 +5,7 @@ New here, Write noob code, Kinda a remake from my another project but didn't wor
 <br>
 Write just for fun and learn.
 <br>
-Can Make and Read QR Code with some options
+It Can Make and Read QR Code with some options.
 <br>
 (Thanks to various useful module and advice provided by the community)
 <br>
@@ -28,11 +28,11 @@ config.json:
         <br>
         Config some addtional setting other than GUI side provide, Like `background_color` And `color`... etc
         <br>
-        `background_color` is for the `back_color` from `qrcode.QRCode.make_image`, defaults to `white`
+        `background_color` is for the `back_color` from `qrcode.QRCode.make_image`, defaults to `white`.
         <br>
-        And `color` if for the `fill_color` in `qrcode.QRCode.make_image`, defaults to `black`
+        And `color` if for the `fill_color` in `qrcode.QRCode.make_image`, defaults to `black`.
         <br>
-        `error_corrections` is for the `error_correction` from `qrcode.constants`, defaults to `0`
+        `error_corrections` is for the `error_correction` from `qrcode.constants`, defaults to `0`.
         <br>
         According to `constants.py`, You can set the value as:
             <br>
